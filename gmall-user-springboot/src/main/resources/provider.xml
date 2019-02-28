@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://dubbo.apache.org/schema/dubbo http://dubbo.apache.org/schema/dubbo/dubbo.xsd
+		http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+	<!-- 1、指定当前服务/应用的名字（同样的服务名字相同，不要和别的服务同名） -->
+	<dubbo:application name="gamll-user-provider"></dubbo:application>
+	<!--指定注册中心位置-->
+	<!-- <dubbo:registry address="zookeeper://127.0.0.1:2181"></dubbo:registry> -->
+	<dubbo:registry protocol="zookeeper" address="127.0.0.1:2181"></dubbo:registry>
+	<!--使用通信规则(通信协议，通信端口)-->
+	<dubbo:protocol name="dubbo" port="20882"/>
+	<!--使用注解-->
+	<!-- <dubbo:annotation package="com.el.gmall.service"></dubbo:annotation>-->
+	<!--指定暴露的服务-->
+	<dubbo:service interface="com.el.gmall.service.UserService" ref="userService01"
+				   timeout="1000" >
+		<dubbo:method name="getUserAddressList" timeout="1000"></dubbo:method>
+	</dubbo:service>
+
+	<!--服务的实现-->
+	<bean id="userService01" class="com.el.gmall.springboot.service.UserServiceImpl"></bean>
+
+<!--	&lt;!&ndash;指定暴露的服务&ndash;&gt;
+	<dubbo:service interface="com.el.gmall.service.UserService" ref="userService02"
+				   timeout="1000" version="1.0.0">
+		<dubbo:method name="getUserAddressList" timeout="1000"></dubbo:method>
+	</dubbo:service>
+
+	&lt;!&ndash;服务的实现&ndash;&gt;
+	<bean id="userService02" class="com.el.gmall.service.UserServiceImpl2"></bean>-->
+	<!--同一设置服务方提供规则-->
+	<dubbo:provider timeout="1000"></dubbo:provider>
+
+
+	<!-- 连接监控中心 -->
+	<dubbo:monitor protocol="registry"></dubbo:monitor>
+</beans>
